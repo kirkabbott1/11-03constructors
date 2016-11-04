@@ -13,20 +13,43 @@
 // Sonny.greet(Jordan);
 // Jordan.greet(Sonny);
 // console.log(Jordan.email, Jordan.phone);
+
+Deck.prototype.draw = function() {
+  var newCard = this.deck.pop();
+  return newCard;
+}
+Deck.prototype.shuffle = function() {
+  for (var i = this.deck.length; i > 0; i--) {
+    var index = Math.floor(Math.random() * i);
+    var temp = this.deck[i];
+    this.deck[i] = this.deck[index];
+    this.deck[index] = temp;
+  }
+  // console.log(this.deck);
+  return this.deck;
+
+}
+
+var myDeck = new Deck();
+// console.log(myDeck.draw());
+console.log(myDeck.shuffle());
+
 function Card(point, suit) {
   this.point = point;
   this.suit = suit;
 };
-Card.prototype.show = function() {
-  console.log('the card point is ' + this.point + ' and suit is ' + this.suit)
-};
-function Deck() {
-  this.Card = Card;
-};
-var myCard = new Card(5, 'diamonds');
+// Card.prototype.show = function() {
+//   console.log('the card point is ' + this.point + ' and suit is ' + this.suit)
+// };
+//
+// var myCard = new Card(5, 'diamonds');
 //
 // myCard.show();
 
+
+Deck.prototype.numCardsLeft = function() {
+  return this.deck.length;
+}
 Card.prototype.getImageUrl = function() {
   var name = this.point;
   if (name  === 11){
@@ -44,16 +67,19 @@ Card.prototype.getImageUrl = function() {
   return 'images/' + name + '_of_' + this.suit + '.png';
 };
 
-console.log(myCard.getImageUrl())
+// console.log(myCard.getImageUrl())
 
 function Hand() {
   this.cardArray = []
   this.points = 0
 };
 
+
+
 Hand.prototype.addCard = function(card) {
   this.cardArray.push({point: card.point, suit: card.suit});
 };
+
 
 Hand.prototype.getPoints = function() {
   // console.log(hand)
@@ -68,15 +94,28 @@ Hand.prototype.getPoints = function() {
         add += 11;
       }
     }
-    console.log(currSum + add);
+    // console.log(currSum + add);
     return currSum + add;
   }, 0)
   return sum;
 };
 
+
 var myHand = new Hand()
+
+function Deck() {
+  this.deck = [];
+  for (var i = 1; i <= 13; i++) {
+    this.deck.push(new Card(i, "diamonds"));
+    this.deck.push(new Card(i, "spades"));
+    this.deck.push(new Card(i, "clubs"));
+    this.deck.push(new Card(i, "hearts"));
+  }
+};
+// console.log(Deck());
+
+// // // console.log(myHand);
+// // myHand.addCard(new Card(5, 'diamonds'));
+// // myHand.addCard(new Card(13, 'spades'));
 // // console.log(myHand);
-// myHand.addCard(new Card(5, 'diamonds'));
-// myHand.addCard(new Card(13, 'spades'));
-// console.log(myHand);
-// myHand.getPoints();
+// // myHand.getPoints();

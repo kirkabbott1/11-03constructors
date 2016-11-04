@@ -48,44 +48,93 @@ describe('Card', function () {
     card = new Card(11, 'hearts');
     expect(card.getImageUrl()).toEqual('images/jack_of_hearts.png');
   });
-});
-describe('hand', function () {
 
-  it('return hand point value', function() {
-    myHand.addCard(new Card(13, 'spades'));
-    expect(myHand.getPoints()).toEqual(10);
+});
+
+describe('Hand', function() {
+  it('empty hand has zero points', function() {
+    var hand = new Hand();
+    expect(hand.getPoints()).toEqual(0);
   });
 
+  it('hand with one card returns value of card', function() {
+    var card = new Card(5, 'clubs');
+    var hand = new Hand();
+    hand.addCard(card);
+    expect(hand.getPoints()).toEqual(5);
+  });
+
+  it('sums multiple cards', function() {
+    var hand = new Hand();
+    hand.addCard(new Card(5, 'clubs'));
+    hand.addCard(new Card(9, 'hearts'));
+    expect(hand.getPoints()).toEqual(14);
+  });
+
+  it('kings, queens, jacks count for 10', function() {
+    var hand = new Hand();
+    hand.addCard(new Card(11, 'clubs'));
+    expect(hand.getPoints()).toEqual(10);
+    hand = new Hand();
+    hand.addCard(new Card(12, 'clubs'));
+    expect(hand.getPoints()).toEqual(10);
+    hand = new Hand();
+    hand.addCard(new Card(13, 'clubs'));
+    expect(hand.getPoints()).toEqual(10);
+  });
+
+  it('aces become 11s', function() {
+    var hand = new Hand();
+    hand.addCard(new Card(1, 'clubs'));
+    expect(hand.getPoints()).toEqual(11);
+  });
+
+  it('aces should not bust if possible', function() {
+    var hand = new Hand();
+    hand.addCard(new Card(10, 'clubs'));
+    hand.addCard(new Card(2, 'clubs'));
+    hand.addCard(new Card(1, 'clubs'));
+    expect(hand.getPoints()).toEqual(13);
+  });
+
+  it('aces should not bust if possible (but aces is in front)', function() {
+    var hand = new Hand();
+    hand.addCard(new Card(1, 'clubs'));
+    hand.addCard(new Card(10, 'clubs'));
+    hand.addCard(new Card(2, 'clubs'));
+    expect(hand.getPoints()).toEqual(13);
+  });
 });
+
 describe('Deck', function() {
   it('instantiates', function() {
     var deck = new Deck();
-    expect(deck.numCardsLeft()).toEqual(52);
+    expect(deck.numOfCards()).toEqual(52);
   });
 
   it('card count decreases', function() {
     var deck = new Deck();
     deck.draw();
-    expect(deck.numCardsLeft()).toEqual(51);
+    expect(deck.numOfCards()).toEqual(51);
   });
 
   it('returns cards in order', function() {
-    var newDeck = new Deck();
+    var deck = new Deck();
     for (var i = 13; i >= 1; i--) {
-      expect(newDeck.draw()).toEqual(new Card(i, 'hearts'));
-      expect(newDeck.draw()).toEqual(new Card(i, 'clubs'));
-      expect(newDeck.draw()).toEqual(new Card(i, 'spades'));
-      expect(newDeck.draw()).toEqual(new Card(i, 'diamonds'));
+      expect(deck.draw()).toEqual(new Card(i, 'spades'));
+      expect(deck.draw()).toEqual(new Card(i, 'hearts'));
+      expect(deck.draw()).toEqual(new Card(i, 'clubs'));
+      expect(deck.draw()).toEqual(new Card(i, 'diamonds'));
     }
   });
 
   it('shuffles', function() {
     var deck = new Deck();
-    var card1 = deck.draw(1);
-    var card2 = deck.draw(2);
+    var card1 = deck.getCard(1);
+    var card2 = deck.getCard(2);
     deck.shuffle();
-    var card1After = deck.draw(1);
-    var card2After = deck.draw(2);
+    var card1After = deck.getCard(1);
+    var card2After = deck.getCard(2);
     var card1moved = card1 !== card1After;
     var card2moved = card2 !== card2After;
     expect(card1moved || card2moved).toEqual(true);
