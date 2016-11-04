@@ -20,14 +20,30 @@ function Card(point, suit) {
 Card.prototype.show = function() {
   console.log('the card point is ' + this.point + ' and suit is ' + this.suit)
 };
-
-var myCard = new Card(5, 'diamonds')
-
-myCard.show();
+function Deck() {
+  this.Card = Card;
+};
+var myCard = new Card(5, 'diamonds');
+//
+// myCard.show();
 
 Card.prototype.getImageUrl = function() {
-  return 'images/' + this.point + '_of_' + this.suit + '.png'
+  var name = this.point;
+  if (name  === 11){
+    name = 'jack';
+  }
+  else if(name === 12){
+    name = 'queen';
+  }
+  else if(name === 13){
+    name = 'king';
+  }
+  else if(name === 1){
+      name = 'ace';
+  }
+  return 'images/' + name + '_of_' + this.suit + '.png';
 };
+
 console.log(myCard.getImageUrl())
 
 function Hand() {
@@ -39,8 +55,9 @@ Hand.prototype.addCard = function(card) {
   this.cardArray.push({point: card.point, suit: card.suit});
 };
 
-Hand.prototype.getPoints = function(hand) {
-  this.cardArray.reduce(function (currSum, addCurrVal) {
+Hand.prototype.getPoints = function() {
+  // console.log(hand)
+  var sum = this.cardArray.reduce(function (currSum, addCurrVal) {
     var add = addCurrVal.point;
     if (add > 10) {
       add = 10;
@@ -51,11 +68,15 @@ Hand.prototype.getPoints = function(hand) {
         add += 11;
       }
     }
+    console.log(currSum + add);
     return currSum + add;
-  }, 0);
+  }, 0)
+  return sum;
 };
 
 var myHand = new Hand()
-myHand.addCard(new Card(5, 'diamonds'))
-myHand.addCard(new Card(13, 'spades'))
-myHand.getPoints()
+// // console.log(myHand);
+// myHand.addCard(new Card(5, 'diamonds'));
+// myHand.addCard(new Card(13, 'spades'));
+// console.log(myHand);
+// myHand.getPoints();

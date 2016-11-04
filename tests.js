@@ -50,7 +50,7 @@ describe('Card', function () {
   });
 
   it('return hand point value', function() {
-    var myHand = new Hand(10, 'diamonds');
+    myHand.addCard(new Card(13, 'spades'));
     expect(myHand.getPoints()).toEqual(10);
   });
 
